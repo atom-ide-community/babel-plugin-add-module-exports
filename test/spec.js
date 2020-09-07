@@ -210,6 +210,28 @@ module.exports = [
     }
   },
   {
+    name: 'handle a single quote string literal export',
+    code: `
+          Object.defineProperty(exports, '__esModule', {value: true});
+          exports['default'] = 'foo';
+        `,
+    expected: {
+      module: 'foo',
+      exports: 'foo'
+    }
+  },
+  {
+    name: 'handle a double quote string literal export',
+    code: `
+          Object.defineProperty(exports, '__esModule', {value: true});
+          exports["default"] = 'foo';
+        `,
+    expected: {
+      module: 'foo',
+      exports: 'foo'
+    }
+  },
+  {
     name: 'export same var as default and named declarations',
     code: 'const foo="bar";export { foo, foo as default };',
     expected: {
