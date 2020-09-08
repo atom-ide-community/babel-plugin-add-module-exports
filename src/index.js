@@ -19,7 +19,15 @@ module.exports = ({ template }) => {
     // HACK: `path.node.body.push` instead of path.pushContainer(due doesn't work in Plugin.post)
     rootPath.node.body.push(template('module.exports = exports.default')())
     if (pluginOptions.addDefaultProperty) {
-      rootPath.node.body.push(template('module.exports.default = exports.default')())
+      rootPath.node.body.push(
+        template(`
+        if (module.exports instanceof Object && module.exports.constructor === Object) {
+          module.exports.default = exports.default
+        } else {
+          console.warn("module.exports.default could not be added.")
+        }
+        `)()
+      )
     }
   }
 
